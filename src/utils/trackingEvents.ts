@@ -590,8 +590,13 @@ export const trackPurchase = (params: {
     const { orderId, cartItems, total, subtotal, frete, discount, couponCode, paymentMethod } = params;
 
     // Persist purchase events to Supabase (one per item)
+    // Brindes (cupom "compre e ganhe") não devem entrar nas métricas de vendas
+    const billableItems = cartItems.filter(
+      (it: any) => !it?.__couponGiftId && it?.category !== "brinde"
+    );
+
     trackProductEventsBatch(
-      cartItems.map(item => ({
+      billableItems.map(item => ({
         product_id: item.id,
         product_name: item.name,
         event_type: 'purchase' as const,
