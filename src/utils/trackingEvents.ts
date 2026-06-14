@@ -129,29 +129,19 @@ const calculateItemValue = (item: CartItem): number => {
  *
  * Só registra evento quando uma nova sessão começa.
  */
-const MENU_VISIT_TRACKED_KEY = 'lov_menu_visit_tracked_session';
+// Flag em memória — evita disparo duplicado dentro do mesmo page load (StrictMode, etc.).
+// Não usamos localStorage como gate porque o funil depende de inserir o evento e a
+// deduplicação por sessão já é feita na agregação (Set<session_id>).
+let _menuVisitTrackedInThisLoad = false;
 
 export const trackMenuVisit = () => {
   try {
-    const { sessionId, isReturningVisitor } = resolveSession();
+    if (_menuVisitTrackedInThisLoad) return;
+    _menuVisitTrackedInThisLoad = true;
 
-    // Garante que registramos apenas uma visita por sessão (independente de quem
-    // criou a sessão primeiro — ex.: ChatAssistant via useSessionId no render).
-    let alreadyTrackedSession: string | null = null;
-    try {
-      alreadyTrackedSession = localStorage.getItem(MENU_VISIT_TRACKED_KEY);
-    } catch { /* noop */ }
+    resolveSession();
 
-    if (alreadyTrackedSession === sessionId) return;
-
-    try {
-      localStorage.setItem(MENU_VISIT_TRACKED_KEY, sessionId);
-    } catch { /* noop */ }
-
-    // A classificação nova/recorrente continua baseada no visitor_id:
-    // se o visitor_id já existia antes do resolveSession desta sessão, é recorrente.
-    // Como ChatAssistant pode ter chamado resolveSession antes, usamos um marcador
-    // adicional para o "primeiro visitor": se não houver registro, é primeira visita.
+    // Classificação nova/recorrente baseada no visitor_id persistente.
     const FIRST_VISIT_KEY = 'lov_visitor_first_visit_done';
     let firstVisitDone = false;
     try {
