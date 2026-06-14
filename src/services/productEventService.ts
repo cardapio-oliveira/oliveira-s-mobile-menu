@@ -105,7 +105,7 @@ export interface ProductMetric {
 export const getProductMetrics = async (): Promise<ProductMetric[]> => {
   const { data, error } = await supabase
     .from('product_events' as any)
-    .select('product_id, product_name, event_type, quantity')
+    .select('product_id, product_name, event_type, quantity, category')
     ;
 
   if (error || !data) {
@@ -116,6 +116,8 @@ export const getProductMetrics = async (): Promise<ProductMetric[]> => {
   const metricsMap = new Map<string, ProductMetric>();
 
   (data as any[]).forEach((row: any) => {
+    // Brindes (cupom "compre e ganhe") nunca entram nas métricas de vendas
+    if (row.category === 'brinde') return;
     const key = row.product_id;
     if (!metricsMap.has(key)) {
       metricsMap.set(key, {
