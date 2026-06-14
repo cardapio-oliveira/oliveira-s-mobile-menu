@@ -148,8 +148,23 @@ const AdminMetrics = () => {
     menuItems.forEach((item) => costMap.set(item.id, item.cost || 0));
     return orders.reduce((sum, o) => {
       if (!Array.isArray(o.items)) return sum;
-      return sum + o.items.reduce((s, item) => {
+      return sum + o.items.reduce((s, item: any) => {
+        if (item?.isGift) return s; // brindes contam em "Custo Brindes"
         const cost = costMap.get(item.menuItemId) || 0;
+        return s + cost * (item.quantity || 1);
+      }, 0);
+    }, 0);
+  }, [orders, menuItems]);
+
+  const custoBrindes = useMemo(() => {
+    const costMap = new Map<string, number>();
+    menuItems.forEach((item) => costMap.set(item.id, item.cost || 0));
+    return orders.reduce((sum, o) => {
+      if (!Array.isArray(o.items)) return sum;
+      return sum + o.items.reduce((s, item: any) => {
+        if (!item?.isGift) return s;
+        const productId = item.giftProductId || item.menuItemId;
+        const cost = costMap.get(productId) || 0;
         return s + cost * (item.quantity || 1);
       }, 0);
     }, 0);
@@ -160,7 +175,10 @@ const AdminMetrics = () => {
     [orders]
   );
 
-  const custoTotal = useMemo(() => custoProduto + custoFrete, [custoProduto, custoFrete]);
+  const custoTotal = useMemo(
+    () => custoProduto + custoFrete + custoBrindes,
+    [custoProduto, custoFrete, custoBrindes]
+  );
 
   const lucratividade = useMemo(() => totalVendas - custoTotal, [totalVendas, custoTotal]);
 
