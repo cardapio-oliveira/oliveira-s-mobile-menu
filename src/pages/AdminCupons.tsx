@@ -61,6 +61,7 @@ type Cupom = {
   criado_em: string;
   produtos_requeridos?: ProdutoRef[] | null;
   produto_brinde?: ProdutoRef | null;
+  primeira_compra_apenas?: boolean;
 };
 
 const initialForm: Partial<Cupom> = {
@@ -76,6 +77,7 @@ const initialForm: Partial<Cupom> = {
   ativo: true,
   produtos_requeridos: [],
   produto_brinde: null,
+  primeira_compra_apenas: false,
 };
 
 export default function AdminCupons() {
@@ -861,6 +863,15 @@ export default function AdminCupons() {
             </div>
             <div className="flex items-center space-x-2">
               <Switch
+                checked={form.primeira_compra_apenas || false}
+                onCheckedChange={(checked) =>
+                  setForm({ ...form, primeira_compra_apenas: checked })
+                }
+              />
+              <Label>Válido apenas para primeira compra</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Switch
                 checked={form.ativo || false}
                 onCheckedChange={(checked) =>
                   setForm({ ...form, ativo: checked })
@@ -949,6 +960,11 @@ export default function AdminCupons() {
                 </div>
               )}
 
+              {c.primeira_compra_apenas && (
+                <p className="text-xs font-semibold text-primary bg-primary/10 rounded px-2 py-1 inline-block">
+                  ⭐ Válido apenas para primeira compra
+                </p>
+              )}
               <p className="text-xs text-gray-500">
                 Validade: {format(new Date(c.data_inicio), "dd/MM/yyyy")} -{" "}
                 {format(new Date(c.data_fim), "dd/MM/yyyy")}
