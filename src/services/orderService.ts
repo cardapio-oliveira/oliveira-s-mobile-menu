@@ -116,6 +116,9 @@ export const createOrder = async (
 
       total += itemTotal;
 
+      const giftProductId = (item as any).__couponGiftId || null;
+      const isGift = !!giftProductId || (item as any).category === "brinde";
+
       return {
         menuItemId: item.menuItemId ?? (item as any).id ?? null,
         name: item.name,
@@ -127,6 +130,8 @@ export const createOrder = async (
         combination: item.combination || null,
         selectedBorder: selectedBorder || null,
         subtotal: itemTotal,
+        isGift,
+        giftProductId,
       };
     })
   );

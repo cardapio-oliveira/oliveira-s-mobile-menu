@@ -148,8 +148,23 @@ const AdminMetrics = () => {
     menuItems.forEach((item) => costMap.set(item.id, item.cost || 0));
     return orders.reduce((sum, o) => {
       if (!Array.isArray(o.items)) return sum;
-      return sum + o.items.reduce((s, item) => {
+      return sum + o.items.reduce((s, item: any) => {
+        if (item?.isGift) return s; // brindes contam em "Custo Brindes"
         const cost = costMap.get(item.menuItemId) || 0;
+        return s + cost * (item.quantity || 1);
+      }, 0);
+    }, 0);
+  }, [orders, menuItems]);
+
+  const custoBrindes = useMemo(() => {
+    const costMap = new Map<string, number>();
+    menuItems.forEach((item) => costMap.set(item.id, item.cost || 0));
+    return orders.reduce((sum, o) => {
+      if (!Array.isArray(o.items)) return sum;
+      return sum + o.items.reduce((s, item: any) => {
+        if (!item?.isGift) return s;
+        const productId = item.giftProductId || item.menuItemId;
+        const cost = costMap.get(productId) || 0;
         return s + cost * (item.quantity || 1);
       }, 0);
     }, 0);
@@ -160,7 +175,10 @@ const AdminMetrics = () => {
     [orders]
   );
 
-  const custoTotal = useMemo(() => custoProduto + custoFrete, [custoProduto, custoFrete]);
+  const custoTotal = useMemo(
+    () => custoProduto + custoFrete + custoBrindes,
+    [custoProduto, custoFrete, custoBrindes]
+  );
 
   const lucratividade = useMemo(() => totalVendas - custoTotal, [totalVendas, custoTotal]);
 
@@ -204,7 +222,8 @@ const AdminMetrics = () => {
     const map = new Map<string, number>();
     orders.forEach((o) => {
       if (Array.isArray(o.items)) {
-        o.items.forEach((item) => {
+        o.items.forEach((item: any) => {
+          if (item?.isGift) return;
           const name = item.name || "Desconhecido";
           const qty = item.quantity || 1;
           map.set(name, (map.get(name) || 0) + qty);
@@ -221,7 +240,8 @@ const AdminMetrics = () => {
     const map = new Map<string, number>();
     orders.forEach((o) => {
       if (Array.isArray(o.items)) {
-        o.items.forEach((item) => {
+        o.items.forEach((item: any) => {
+          if (item?.isGift) return;
           const name = item.name || "Desconhecido";
           const qty = item.quantity || 1;
           const subtotal = (item as any).subtotal || (item.price || 0) * qty;
@@ -369,6 +389,17 @@ const AdminMetrics = () => {
               <CardContent>
                 <p className="text-2xl font-bold text-destructive">
                   R$ {custoFrete.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground">Custo Brindes</CardTitle>
+                <DollarSign className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <p className="text-2xl font-bold text-destructive">
+                  R$ {custoBrindes.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
                 </p>
               </CardContent>
             </Card>
