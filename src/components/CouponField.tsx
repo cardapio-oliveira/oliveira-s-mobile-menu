@@ -118,6 +118,42 @@ const CouponField: React.FC = () => {
         }
       }
 
+      if (cupomData.primeira_compra_apenas) {
+        if (!currentUser) {
+          logInvalid();
+          toast({
+            title: "Login necessário",
+            description: "Este cupom é válido apenas para a primeira compra. Faça login para usá-lo.",
+            variant: "destructive",
+          });
+          return;
+        }
+        const userEmail = (currentUser as any).email?.toLowerCase?.() || null;
+        const userId = (currentUser as any).uid || (currentUser as any).id || null;
+        const filters: string[] = [];
+        if (userId) {
+          filters.push(`user_id.eq.${userId}`);
+          filters.push(`firebase_id.eq.${userId}`);
+        }
+        if (userEmail) filters.push(`user_email.eq.${userEmail}`);
+        if (filters.length > 0) {
+          const { count } = await supabase
+            .from("pedidos_sabor_delivery" as any)
+            .select("id", { count: "exact", head: true })
+            .or(filters.join(","))
+            .not("status_atual", "in", '("cancelled","cancelado","Cancelado")');
+          if ((count ?? 0) > 0) {
+            logInvalid();
+            toast({
+              title: "Cupom indisponível",
+              description: "Este cupom é válido apenas para clientes em sua primeira compra.",
+              variant: "destructive",
+            });
+            return;
+          }
+        }
+      }
+
       setAppliedCoupon({
         id: cupomData.id,
         nome: cupomData.nome,
