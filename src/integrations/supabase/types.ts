@@ -165,6 +165,7 @@ export type Database = {
           limite_uso: number | null
           nome: string
           origem: string | null
+          primeira_compra_apenas: boolean
           produto_brinde: Json | null
           produtos_requeridos: Json | null
           tipo: string
@@ -183,6 +184,7 @@ export type Database = {
           limite_uso?: number | null
           nome: string
           origem?: string | null
+          primeira_compra_apenas?: boolean
           produto_brinde?: Json | null
           produtos_requeridos?: Json | null
           tipo: string
@@ -201,6 +203,7 @@ export type Database = {
           limite_uso?: number | null
           nome?: string
           origem?: string | null
+          primeira_compra_apenas?: boolean
           produto_brinde?: Json | null
           produtos_requeridos?: Json | null
           tipo?: string
