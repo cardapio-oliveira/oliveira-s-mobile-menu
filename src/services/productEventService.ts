@@ -176,7 +176,7 @@ export const getFunnelData = async (startDate: string, endDate: string): Promise
 
   const { data, error } = await supabase
     .from('product_events' as any)
-    .select('product_id, product_name, event_type, quantity, session_id')
+    .select('product_id, product_name, event_type, quantity, session_id, category')
     .gte('created_at', startIso)
     .lte('created_at', endIso)
     .in('event_type', [
@@ -235,6 +235,9 @@ export const getFunnelData = async (startDate: string, endDate: string): Promise
       checkoutSessions.add(sid);
       return;
     }
+
+    // Brindes (cupom "compre e ganhe") não entram no funil de vendas
+    if (row.category === 'brinde') return;
 
     const id = row.product_id;
     ensureProduct(id, row.product_name);
