@@ -222,7 +222,8 @@ const AdminMetrics = () => {
     const map = new Map<string, number>();
     orders.forEach((o) => {
       if (Array.isArray(o.items)) {
-        o.items.forEach((item) => {
+        o.items.forEach((item: any) => {
+          if (item?.isGift) return;
           const name = item.name || "Desconhecido";
           const qty = item.quantity || 1;
           map.set(name, (map.get(name) || 0) + qty);
@@ -239,7 +240,8 @@ const AdminMetrics = () => {
     const map = new Map<string, number>();
     orders.forEach((o) => {
       if (Array.isArray(o.items)) {
-        o.items.forEach((item) => {
+        o.items.forEach((item: any) => {
+          if (item?.isGift) return;
           const name = item.name || "Desconhecido";
           const qty = item.quantity || 1;
           const subtotal = (item as any).subtotal || (item.price || 0) * qty;
