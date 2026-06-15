@@ -311,6 +311,7 @@ export type Database = {
           default_peso_g: number | null
           endereco: string | null
           estado: string | null
+          horarios_funcionamento: Json
           id: string
           modelo_frete: string | null
           nome: string
@@ -337,6 +338,7 @@ export type Database = {
           default_peso_g?: number | null
           endereco?: string | null
           estado?: string | null
+          horarios_funcionamento?: Json
           id?: string
           modelo_frete?: string | null
           nome: string
@@ -363,6 +365,7 @@ export type Database = {
           default_peso_g?: number | null
           endereco?: string | null
           estado?: string | null
+          horarios_funcionamento?: Json
           id?: string
           modelo_frete?: string | null
           nome?: string
