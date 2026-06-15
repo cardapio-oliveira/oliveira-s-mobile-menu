@@ -1576,16 +1576,24 @@ const proceedWithOrder = async () => {
             🍕 Adicionar mais itens
           </Button>
 
+          {blockOrder && <StoreClosedBanner />}
+
           <Button 
             className="w-full" 
-            disabled={isLoading || !!freteError || (!freteCalculado && !hasFreteGratis)}
+            disabled={isLoading || !!freteError || (!freteCalculado && !hasFreteGratis) || blockOrder}
             onClick={(e) => {
               e.preventDefault();
               const form = document.querySelector('form');
               if (form) form.requestSubmit();
             }}
           >
-            {isLoading ? "Processando..." : (!freteCalculado && !hasFreteGratis) ? "Informe o CEP para calcular o frete" : `Finalizar Pedido - ${formatCurrency(finalTotal + (hasFreteGratis ? 0 : valorFrete))}`}
+            {blockOrder
+              ? "Loja fechada — pedidos indisponíveis"
+              : isLoading
+                ? "Processando..."
+                : (!freteCalculado && !hasFreteGratis)
+                  ? "Informe o CEP para calcular o frete"
+                  : `Finalizar Pedido - ${formatCurrency(finalTotal + (hasFreteGratis ? 0 : valorFrete))}`}
           </Button>
         </div>
       </div>
