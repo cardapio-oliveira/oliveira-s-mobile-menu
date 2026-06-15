@@ -108,6 +108,10 @@ export default function MinhaEmpresa() {
         setCidade(empresaData.cidade || "");
         setEstado(empresaData.estado || "");
         setComplemento(empresaData.complemento || "");
+        const h = (empresaData as any).horarios_funcionamento;
+        if (h && typeof h === "object") {
+          setHorarios({ ...DEFAULT_SCHEDULE, ...h });
+        }
       }
     } catch (error) {
       console.error("Erro ao carregar dados:", error);
@@ -169,6 +173,7 @@ export default function MinhaEmpresa() {
       complemento,
       endereco: enderecoCompleto,
       pais: "Brasil",
+      horarios_funcionamento: horarios,
     };
 
     try {
