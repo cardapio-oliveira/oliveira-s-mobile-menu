@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
+import { DEFAULT_SCHEDULE, DAY_NAMES, WeekSchedule } from "@/hooks/useStoreOpen";
 
 export default function MinhaEmpresa() {
   const navigate = useNavigate();
@@ -21,6 +22,14 @@ export default function MinhaEmpresa() {
   const [loading, setLoading] = useState(false);
   const [empresaId, setEmpresaId] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
+  const [horarios, setHorarios] = useState<WeekSchedule>(DEFAULT_SCHEDULE);
+
+  const updateHorario = (day: string, field: "open" | "close" | "closed", value: string | boolean) => {
+    setHorarios((prev) => ({
+      ...prev,
+      [day]: { ...prev[day], [field]: value as any },
+    }));
+  };
 
   // Carregar dados salvos ao montar
   useEffect(() => {
