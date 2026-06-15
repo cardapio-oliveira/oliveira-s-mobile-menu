@@ -40,10 +40,17 @@ import { phoneDigits as toPhoneDigits } from "@/utils/phoneUtils";
 import { withComunicacaoMeta } from "@/utils/webhookPayload";
 import CouponField from "@/components/CouponField";
 import { trackCheckoutEvent } from "@/services/checkoutEventService";
+import { useStoreOpen } from "@/hooks/useStoreOpen";
+import { useUserRole } from "@/hooks/useUserRole";
+import StoreClosedBanner from "@/components/StoreClosedBanner";
 
 const Checkout = () => {
   const { cartItems, cartTotal, clearCart, removeFromCart, updateCartItemByIndex, appliedCoupon, discountAmount, finalTotal } = useCart();
   const { currentUser } = useAuth();
+  const { isOpen: storeIsOpen, loading: storeOpenLoading } = useStoreOpen();
+  const { role } = useUserRole();
+  const canBypassHours = role === "admin" || role === "super-admin" || role === "moderator";
+  const blockOrder = !storeOpenLoading && !storeIsOpen && !canBypassHours;
   const { toast } = useToast();
   const navigate = useNavigate();
   
@@ -506,6 +513,16 @@ const Checkout = () => {
 
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
+
+  if (blockOrder) {
+    toast({
+      title: "Loja fechada",
+      description: "Pedidos só podem ser finalizados dentro do horário de funcionamento.",
+      variant: "destructive",
+    });
+    return;
+  }
+
 
   // Validação do telefone: código país 55 + DDD (2) + número (8 fixo / 9 mobile)
   // Se o primeiro dígito após o DDD for 9, é mobile e exige 13 dígitos no total
@@ -1149,6 +1166,7 @@ const proceedWithOrder = async () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-6">Finalizar Pedido</h1>
+      {blockOrder && <div className="mb-4"><StoreClosedBanner /></div>}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <Card>
           <CardHeader>
@@ -1559,16 +1577,24 @@ const proceedWithOrder = async () => {
             🍕 Adicionar mais itens
           </Button>
 
+          {blockOrder && <StoreClosedBanner />}
+
           <Button 
             className="w-full" 
-            disabled={isLoading || !!freteError || (!freteCalculado && !hasFreteGratis)}
+            disabled={isLoading || !!freteError || (!freteCalculado && !hasFreteGratis) || blockOrder}
             onClick={(e) => {
               e.preventDefault();
               const form = document.querySelector('form');
               if (form) form.requestSubmit();
             }}
           >
-            {isLoading ? "Processando..." : (!freteCalculado && !hasFreteGratis) ? "Informe o CEP para calcular o frete" : `Finalizar Pedido - ${formatCurrency(finalTotal + (hasFreteGratis ? 0 : valorFrete))}`}
+            {blockOrder
+              ? "Loja fechada — pedidos indisponíveis"
+              : isLoading
+                ? "Processando..."
+                : (!freteCalculado && !hasFreteGratis)
+                  ? "Informe o CEP para calcular o frete"
+                  : `Finalizar Pedido - ${formatCurrency(finalTotal + (hasFreteGratis ? 0 : valorFrete))}`}
           </Button>
         </div>
       </div>
