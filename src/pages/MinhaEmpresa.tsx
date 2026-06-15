@@ -356,6 +356,69 @@ export default function MinhaEmpresa() {
             />
           </div>
 
+          <hr className="my-4" />
+
+          <div>
+            <h2 className="text-lg font-semibold text-gray-800 mb-1">Horário de Funcionamento</h2>
+            <p className="text-xs text-gray-500 mb-3">
+              Fora desses horários, os clientes poderão navegar pelo cardápio, mas não conseguirão finalizar pedidos. Administradores e moderadores podem finalizar pedidos a qualquer momento.
+            </p>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm border border-gray-200 rounded-lg">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="text-left p-2 font-medium text-gray-700">Dia</th>
+                    <th className="text-left p-2 font-medium text-gray-700">Fechado</th>
+                    <th className="text-left p-2 font-medium text-gray-700">Abre</th>
+                    <th className="text-left p-2 font-medium text-gray-700">Fecha</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {DAY_NAMES.map((name, idx) => {
+                    const key = String(idx);
+                    const h = horarios[key] || DEFAULT_SCHEDULE[key];
+                    return (
+                      <tr key={key} className="border-t border-gray-200">
+                        <td className="p-2 text-gray-700">{name}</td>
+                        <td className="p-2">
+                          <input
+                            type="checkbox"
+                            checked={!!h.closed}
+                            onChange={(e) => updateHorario(key, "closed", e.target.checked)}
+                            className="h-4 w-4 accent-[#fa6500]"
+                          />
+                        </td>
+                        <td className="p-2">
+                          <input
+                            type="time"
+                            value={h.open}
+                            disabled={!!h.closed}
+                            onChange={(e) => updateHorario(key, "open", e.target.value)}
+                            className="border rounded p-1 disabled:bg-gray-100 disabled:text-gray-400"
+                          />
+                        </td>
+                        <td className="p-2">
+                          <input
+                            type="time"
+                            value={h.close}
+                            disabled={!!h.closed}
+                            onChange={(e) => updateHorario(key, "close", e.target.value)}
+                            className="border rounded p-1 disabled:bg-gray-100 disabled:text-gray-400"
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            <p className="text-xs text-gray-400 mt-2">
+              Para horários que cruzam a meia-noite, defina o fechamento menor que a abertura (ex: 18:00 → 02:00).
+            </p>
+          </div>
+
+
+
           <button
             type="submit"
             disabled={loading}
