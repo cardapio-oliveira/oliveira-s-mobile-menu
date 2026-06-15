@@ -17,6 +17,7 @@ import { useLayoutSettings } from "@/hooks/useLayoutSettings";
 import { useActiveOrdersCount } from "@/hooks/useActiveOrdersCount";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
+import StoreClosedBanner from "@/components/StoreClosedBanner";
 
 const Index = () => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
@@ -160,6 +161,14 @@ const Index = () => {
           }
         />
       </div>
+
+      <div className="px-4 mt-2">
+        <div className="max-w-3xl mx-auto">
+          <StoreClosedBanner />
+        </div>
+      </div>
+
+
 
       {/* Busca - aparece antes da nav no mobile, depois no desktop */}
       {/* ALTERADO: Adicionado mb-8 para afastar a busca mobile da CategoryNav com simetria */}
