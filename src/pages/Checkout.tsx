@@ -514,6 +514,16 @@ const Checkout = () => {
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
 
+  if (blockOrder) {
+    toast({
+      title: "Loja fechada",
+      description: "Pedidos só podem ser finalizados dentro do horário de funcionamento.",
+      variant: "destructive",
+    });
+    return;
+  }
+
+
   // Validação do telefone: código país 55 + DDD (2) + número (8 fixo / 9 mobile)
   // Se o primeiro dígito após o DDD for 9, é mobile e exige 13 dígitos no total
   const phoneDigits = customerPhone.replace(/\D/g, "");
