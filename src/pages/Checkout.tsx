@@ -40,10 +40,17 @@ import { phoneDigits as toPhoneDigits } from "@/utils/phoneUtils";
 import { withComunicacaoMeta } from "@/utils/webhookPayload";
 import CouponField from "@/components/CouponField";
 import { trackCheckoutEvent } from "@/services/checkoutEventService";
+import { useStoreOpen } from "@/hooks/useStoreOpen";
+import { useUserRole } from "@/hooks/useUserRole";
+import StoreClosedBanner from "@/components/StoreClosedBanner";
 
 const Checkout = () => {
   const { cartItems, cartTotal, clearCart, removeFromCart, updateCartItemByIndex, appliedCoupon, discountAmount, finalTotal } = useCart();
   const { currentUser } = useAuth();
+  const { isOpen: storeIsOpen, loading: storeOpenLoading } = useStoreOpen();
+  const { role } = useUserRole();
+  const canBypassHours = role === "admin" || role === "super-admin" || role === "moderator";
+  const blockOrder = !storeOpenLoading && !storeIsOpen && !canBypassHours;
   const { toast } = useToast();
   const navigate = useNavigate();
   
