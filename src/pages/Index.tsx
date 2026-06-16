@@ -37,7 +37,6 @@ const Index = () => {
   useEffect(() => {
     const loadData = async () => {
       const [items, cats] = await Promise.all([getAllMenuItems(), getAllCategories()]);
-      // Show available items AND items with zero stock (faded out)
       setMenuItems(items.filter(item => item.available !== false || (item.stock !== null && item.stock <= 0)));
       setCategories([{ id: "all", name: "Todos", order: -1 }, ...cats.filter(c => c.visible !== false)]);
     };
@@ -48,7 +47,6 @@ const Index = () => {
     }
   }, []);
 
-  // Verificação de retorno do Stripe
   useEffect(() => {
     const stripeStatus = searchParams.get("stripe");
     const sessionId = searchParams.get("session_id");
@@ -184,36 +182,33 @@ const Index = () => {
         />
       </div>
 
-      {/* Banners extras (2:1) */}
-      {(settings.empresa_banner_extra1_url || settings.empresa_banner_extra2_url) && (
-        <div className="container mx-auto px-4 mt-3">
+      {settings.empresa_banner_extra1_url || settings.empresa_banner_extra2_url ? (
+        <div className="container mx-auto px-4 -mt-5 md:mt-3">
           <div className="grid grid-cols-2 gap-3">
-            {[settings.empresa_banner_extra1_url, settings.empresa_banner_extra2_url].map((url, i) => (
-              <div
-                key={i}
-                className="w-full overflow-hidden rounded-lg bg-muted"
-                style={{ aspectRatio: "2 / 1" }}
-              >
-                {url ? (
+            {[settings.empresa_banner_extra1_url, settings.empresa_banner_extra2_url].map((url, i) =>
+              url ? (
+                <div
+                  key={i}
+                  className="w-full overflow-hidden rounded-lg bg-muted"
+                  style={{ aspectRatio: "2 / 1" }}
+                >
                   <img src={url} alt={`Banner ${i + 1}`} className="w-full h-full object-cover" />
-                ) : null}
-              </div>
-            ))}
+                </div>
+              ) : null
+            )}
           </div>
         </div>
+      ) : (
+        <div className="h-2 md:hidden" />
       )}
 
-      <div className="px-4 mt-2">
+      <div className="px-4 mt-0 md:mt-1">
         <div className="max-w-3xl mx-auto">
           <StoreClosedBanner />
         </div>
       </div>
-
-
-
-      {/* Busca - aparece antes da nav no mobile, depois no desktop */}
-      {/* ALTERADO: Adicionado mb-8 para afastar a busca mobile da CategoryNav com simetria */}
-      <div className="order-1 md:order-3 px-4 z-10 mt-4 flex md:hidden mb-4">
+        
+      <div className="order-1 md:order-3 px-4 z-10 -mt-2 flex md:hidden mb-1">
         <div className="relative w-full max-w-4xl mx-auto">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-primary/60" />
           <Input
@@ -223,18 +218,24 @@ const Index = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10 pr-10 h-12 text-sm border-2 border-muted bg-card shadow-md rounded-xl focus-visible:ring-primary"
           />
-          {searchTerm && <X onClick={() => setSearchTerm("")} className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground cursor-pointer" />}
+          {searchTerm && (
+            <X
+              onClick={() => setSearchTerm("")}
+              className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground cursor-pointer"
+            />
+          )}
         </div>
       </div>
 
-      {/* CategoryNav - filha direta para sticky funcionar contra o container alto */}
+
+      {/* CategoryNav */}
       <CategoryNav 
         categories={categories} 
         activeCategory={activeCategory}
         onSelectCategory={(id) => setActiveCategory(id)}
       />
 
-      {/* Busca no desktop - abaixo da nav */}
+      {/* Busca no desktop */}
       <div className="px-4 z-10 mt-6 mb-6 hidden md:block">
         <div className="relative w-full max-w-4xl mx-auto">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-primary/60" />
@@ -249,9 +250,8 @@ const Index = () => {
         </div>
       </div>
 
-
-      {/* ALTERADO: Ajustado o padding-top de pt-0 para pt-4 no container mobile para harmonizar com a margem inferior da busca */}
-      <div className="container mx-auto px-4 pt-4 pb-8 md:pt-8">
+      {/* Container de Itens */}
+      <div className="container mx-auto px-4 pt-0 pb-8 md:pt-8">
         {activeCategory === "all" ? (
           groupedItems.map(({ category, items }) => (
             <MenuSection key={category.id} title={category.name} categoryId={category.id} category={category} items={items} itemRefs={itemRefs} />
