@@ -7,6 +7,8 @@ export interface LayoutSettings {
   empresa_logo_url: string;
   empresa_banner_url: string;
   empresa_banner_mobile_url: string;
+  empresa_banner_extra1_url: string;
+  empresa_banner_extra2_url: string;
   usar_mesma_imagem_mobile: string;
   cor_primaria: string;
   cor_secundaria: string;
@@ -32,6 +34,8 @@ const defaults: LayoutSettings = {
   empresa_logo_url: 'https://bmhxnlxcgseemmfacuqi.supabase.co/storage/v1/object/public/imagens_clickprato/logo_clickprato_preto.png',
   empresa_banner_url: 'https://bmhxnlxcgseemmfacuqi.supabase.co/storage/v1/object/public/imagens_clickprato/banner_clickprato2.png',
   empresa_banner_mobile_url: 'https://bmhxnlxcgseemmfacuqi.supabase.co/storage/v1/object/public/imagens_clickprato/banner4.png',
+  empresa_banner_extra1_url: '',
+  empresa_banner_extra2_url: '',
   usar_mesma_imagem_mobile: 'false',
   cor_primaria: '#ff6600',
   cor_secundaria: '#ff9933',
