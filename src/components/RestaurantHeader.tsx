@@ -1,5 +1,6 @@
 import React from "react";
 import { useLayoutSettings } from "@/hooks/useLayoutSettings";
+import StoreStatusBadge from "@/components/StoreStatusBadge";
 
 interface RestaurantHeaderProps {
   actions?: React.ReactNode;
@@ -11,9 +12,9 @@ const RestaurantHeader: React.FC<RestaurantHeaderProps> = ({ actions }) => {
   if (loading) {
     return (
       <div className="relative">
-        <div className="h-48 sm:h-80 w-full bg-muted animate-pulse" />
-        <div className="container mx-auto px-4 relative -mt-4 sm:-mt-10 z-10 mb-1">
-          <div className="rounded-lg shadow-lg p-3 sm:p-6 bg-muted animate-pulse h-32" />
+        <div className="h-28 sm:h-48 w-full bg-muted animate-pulse" />
+        <div className="container mx-auto px-4 relative -mt-4 sm:-mt-8 z-10 mb-1">
+          <div className="rounded-lg shadow-lg p-3 sm:p-4 bg-muted animate-pulse h-24" />
         </div>
       </div>
     );
@@ -26,8 +27,9 @@ const RestaurantHeader: React.FC<RestaurantHeaderProps> = ({ actions }) => {
 
   return (
     <div className="relative">
+      {/* Banner principal — altura reduzida */}
       <div
-        className="h-48 sm:h-80 w-full overflow-hidden"
+        className="h-28 sm:h-48 w-full overflow-hidden"
         style={{
           background: `linear-gradient(to left, ${settings.cor_secundaria}, ${settings.cor_primaria})`,
         }}
@@ -45,46 +47,45 @@ const RestaurantHeader: React.FC<RestaurantHeaderProps> = ({ actions }) => {
           />
         </picture>
       </div>
-      <div className="container mx-auto px-4 relative -mt-4 sm:-mt-10 z-10 mb-1">
-        <div className="rounded-lg shadow-lg p-3 sm:p-6" style={{ backgroundColor: settings.cor_background_header }}>
-          <div className="flex flex-col md:flex-row md:items-center gap-4">
-            {/* Logo + Nome */}
-            <div className="flex flex-col sm:flex-row items-center md:flex-1">
-              <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-md mr-0 sm:mr-6 mb-4 sm:mb-0 flex-shrink-0">
-                <img
-                  src={settings.empresa_logo_url}
-                  alt="Logo"
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = "/placeholder.svg";
-                  }}
-                />
-              </div>
-              <div className="text-center sm:text-left">
-                <h1 className="text-2xl sm:text-3xl font-bold" style={{ color: settings.cor_fonte }}>{settings.empresa_nome}</h1>
-                <p className="mt-1 whitespace-pre-line" style={{ color: settings.cor_fonte }}><b>{settings.empresa_descricao}</b></p>
 
-                <div className="flex items-center justify-center sm:justify-start mt-2">
-                  <div className="flex text-yellow-400">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <svg key={star} className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                      </svg>
-                    ))}
-                  </div>
-                  <span className="ml-2" style={{ color: settings.cor_fonte }}>4.8 (120+)</span>
-                </div>
-              </div>
+      {/* Caixa de informações compacta */}
+      <div className="container mx-auto px-4 relative -mt-6 sm:-mt-8 z-10 mb-1">
+        <div
+          className="rounded-lg shadow-lg p-3 sm:p-4"
+          style={{ backgroundColor: settings.cor_background_header }}
+        >
+          {/* Linha 1: logo + nome/desc + status */}
+          <div className="flex items-center gap-3">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden border-2 border-white shadow-md flex-shrink-0">
+              <img
+                src={settings.empresa_logo_url}
+                alt="Logo"
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = "/placeholder.svg";
+                }}
+              />
             </div>
-
-            {/* Ações (botões + email) */}
-            {actions && (
-              <div className="md:flex-shrink-0 md:ml-auto">
-                {actions}
-              </div>
-            )}
+            <div className="flex-1 min-w-0">
+              <h1
+                className="text-base sm:text-xl font-bold leading-tight truncate"
+                style={{ color: settings.cor_fonte }}
+              >
+                {settings.empresa_nome}
+              </h1>
+              <p
+                className="text-xs sm:text-sm leading-snug truncate"
+                style={{ color: settings.cor_fonte }}
+              >
+                {settings.empresa_descricao}
+              </p>
+            </div>
+            <StoreStatusBadge textColor={settings.cor_fonte} className="flex-shrink-0" />
           </div>
+
+          {/* Ações (email + botões) */}
+          {actions && <div className="mt-3">{actions}</div>}
         </div>
       </div>
     </div>
