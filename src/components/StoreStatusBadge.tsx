@@ -11,7 +11,7 @@ const StoreStatusBadge = ({ textColor, className = "" }: Props) => {
 
   return (
     <div
-      className={`flex flex-col items-center text-center leading-tight ${className}`}
+      className={`flex items-center justify-center gap-2 ${className}`}
       style={{ color: textColor }}
     >
       <span
@@ -21,7 +21,7 @@ const StoreStatusBadge = ({ textColor, className = "" }: Props) => {
       >
         {isOpen ? "Aberto" : "Fechado"}
       </span>
-      <span className="text-xs mt-1 opacity-90">{status.label}</span>
+      <span className="text-xs opacity-90">{status.label}</span>
     </div>
   );
 };
