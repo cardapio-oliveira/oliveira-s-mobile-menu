@@ -12,8 +12,8 @@ const RestaurantHeader: React.FC<RestaurantHeaderProps> = ({ actions }) => {
   if (loading) {
     return (
       <div className="relative">
-        <div className="h-28 sm:h-48 w-full bg-muted animate-pulse" />
-        <div className="container mx-auto px-4 relative -mt-4 sm:-mt-8 z-10 mb-1">
+        <div className="h-44 sm:h-72 w-full bg-muted animate-pulse" />
+        <div className="container mx-auto px-4 relative -mt-[4.9rem] sm:-mt-[7rem] z-10 mb-1">
           <div className="rounded-lg shadow-lg p-3 sm:p-4 bg-muted animate-pulse h-24" />
         </div>
       </div>
@@ -27,9 +27,9 @@ const RestaurantHeader: React.FC<RestaurantHeaderProps> = ({ actions }) => {
 
   return (
     <div className="relative">
-      {/* Banner principal — altura reduzida */}
+      {/* Banner principal — altura aumentada; a caixa sobrepõe ~70% para não empurrar conteúdo */}
       <div
-        className="h-28 sm:h-48 w-full overflow-hidden"
+        className="h-44 sm:h-72 w-full overflow-hidden"
         style={{
           background: `linear-gradient(to left, ${settings.cor_secundaria}, ${settings.cor_primaria})`,
         }}
@@ -48,13 +48,13 @@ const RestaurantHeader: React.FC<RestaurantHeaderProps> = ({ actions }) => {
         </picture>
       </div>
 
-      {/* Caixa de informações compacta */}
-      <div className="container mx-auto px-4 relative -mt-6 sm:-mt-8 z-10 mb-1">
+      {/* Caixa de informações: sobe sobre o banner cobrindo 70% da própria altura */}
+      <div className="container mx-auto px-4 relative -mt-[4.9rem] sm:-mt-[7rem] z-10 mb-1">
         <div
           className="rounded-lg shadow-lg p-3 sm:p-4"
           style={{ backgroundColor: settings.cor_background_header }}
         >
-          {/* Linha 1: logo + nome/desc + status */}
+          {/* Linha 1: logo + nome/descrição */}
           <div className="flex items-center gap-3">
             <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full overflow-hidden border-2 border-white shadow-md flex-shrink-0">
               <img
@@ -81,7 +81,11 @@ const RestaurantHeader: React.FC<RestaurantHeaderProps> = ({ actions }) => {
                 {settings.empresa_descricao}
               </p>
             </div>
-            <StoreStatusBadge textColor={settings.cor_fonte} className="flex-shrink-0" />
+          </div>
+
+          {/* Linha 2: status da loja entre info e botões */}
+          <div className="mt-2 flex justify-center">
+            <StoreStatusBadge textColor={settings.cor_fonte} />
           </div>
 
           {/* Ações (email + botões) */}
