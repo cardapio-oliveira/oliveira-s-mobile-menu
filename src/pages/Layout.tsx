@@ -34,6 +34,8 @@ const Layout = () => {
   const [logoUrl, setLogoUrl] = useState('');
   const [bannerUrl, setBannerUrl] = useState('');
   const [bannerMobileUrl, setBannerMobileUrl] = useState('');
+  const [bannerExtra1Url, setBannerExtra1Url] = useState('');
+  const [bannerExtra2Url, setBannerExtra2Url] = useState('');
   const [usarMesmaImagemMobile, setUsarMesmaImagemMobile] = useState(true);
   const [corPrimaria, setCorPrimaria] = useState('#ff6600');
   const [corSecundaria, setCorSecundaria] = useState('#ff9933');
@@ -81,6 +83,8 @@ const Layout = () => {
       setLogoUrl(settings.empresa_logo_url);
       setBannerUrl(settings.empresa_banner_url);
       setBannerMobileUrl(settings.empresa_banner_mobile_url);
+      setBannerExtra1Url(settings.empresa_banner_extra1_url);
+      setBannerExtra2Url(settings.empresa_banner_extra2_url);
       setUsarMesmaImagemMobile(settings.usar_mesma_imagem_mobile !== 'false');
       setCorPrimaria(settings.cor_primaria);
       setCorSecundaria(settings.cor_secundaria);
@@ -161,6 +165,8 @@ const Layout = () => {
         saveLayoutSetting('empresa_logo_url', logoUrl),
         saveLayoutSetting('empresa_banner_url', bannerUrl),
         saveLayoutSetting('empresa_banner_mobile_url', bannerMobileUrl),
+        saveLayoutSetting('empresa_banner_extra1_url', bannerExtra1Url),
+        saveLayoutSetting('empresa_banner_extra2_url', bannerExtra2Url),
         saveLayoutSetting('usar_mesma_imagem_mobile', usarMesmaImagemMobile ? 'true' : 'false'),
         saveLayoutSetting('cor_primaria', corPrimaria),
         saveLayoutSetting('cor_secundaria', corSecundaria),
