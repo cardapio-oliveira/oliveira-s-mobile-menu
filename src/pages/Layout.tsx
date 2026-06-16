@@ -383,6 +383,36 @@ const Layout = () => {
                 </div>
               )}
             </div>
+
+            {/* Banners Extras (2:1) abaixo do header */}
+            {[
+              { label: 'Banner Extra 1 (2:1)', url: bannerExtra1Url, setter: setBannerExtra1Url },
+              { label: 'Banner Extra 2 (2:1)', url: bannerExtra2Url, setter: setBannerExtra2Url },
+            ].map((b) => (
+              <div key={b.label}>
+                <Label>{b.label}</Label>
+                {b.url && (
+                  <img
+                    src={b.url}
+                    alt={`${b.label} preview`}
+                    className="w-full object-cover rounded border mb-2"
+                    style={{ aspectRatio: '2 / 1' }}
+                  />
+                )}
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleImageUpload(e, b.setter)}
+                  disabled={isUploading}
+                />
+                <Input
+                  className="mt-2"
+                  placeholder="Ou cole a URL da imagem"
+                  value={b.url}
+                  onChange={(e) => b.setter(e.target.value)}
+                />
+              </div>
+            ))}
           </CardContent>
         </Card>
 
