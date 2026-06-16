@@ -18,9 +18,9 @@ const CategoryNav: React.FC<CategoryNavProps> = ({
   const { getColors } = useCategoryColors();
 
   return (
-    <div className="sticky top-0 z-50 overflow-x-auto bg-white py-1 md:py-2 shadow-md">
+    <div className="sticky top-0 z-50 overflow-x-auto bg-white py-1 md:py-1.5 shadow-md">
       <div className="container mx-auto px-4">
-        <div className="flex space-x-4 md:space-x-8">
+        <div className="flex space-x-3 md:space-x-5">
           {categories.map((category) => {
             const catColors = getColors(category.id);
             return (
@@ -28,7 +28,7 @@ const CategoryNav: React.FC<CategoryNavProps> = ({
                 key={category.id}
                 onClick={() => onSelectCategory(category.id)}
                 className={cn(
-                  "food-category whitespace-nowrap hover:opacity-80 transition-colors px-3 py-1 rounded text-sm md:text-base",
+                  "food-category whitespace-nowrap hover:opacity-80 transition-colors px-2 py-1 rounded text-[11px] md:text-xs",
                   activeCategory === category.id && "active"
                 )}
                 style={{
