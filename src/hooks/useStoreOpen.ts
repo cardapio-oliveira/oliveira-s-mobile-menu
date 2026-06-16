@@ -29,6 +29,11 @@ const toMinutes = (hhmm: string) => {
   return h * 60 + m;
 };
 
+export const formatHour = (hhmm: string) => {
+  const [h, m] = (hhmm || "00:00").split(":");
+  return `${h}h${m}`;
+};
+
 export const isStoreOpenNow = (schedule: WeekSchedule, now: Date = new Date()) => {
   const day = String(now.getDay());
   const today = schedule?.[day];
@@ -39,8 +44,29 @@ export const isStoreOpenNow = (schedule: WeekSchedule, now: Date = new Date()) =
   if (closeM > openM) {
     return cur >= openM && cur < closeM;
   }
-  // Overnight (close <= open): open today OR before close after midnight
   return cur >= openM || cur < closeM;
+};
+
+/** Returns status text: "Aberto até às HHhMM" or "Abre às HHhMM" (next opening). */
+export const getStoreStatusLabel = (schedule: WeekSchedule, now: Date = new Date()) => {
+  const open = isStoreOpenNow(schedule, now);
+  const day = now.getDay();
+  if (open) {
+    const today = schedule[String(day)];
+    return { isOpen: true, label: `Aberto até às ${formatHour(today.close)}` };
+  }
+  // Find next opening within 7 days
+  const curMin = now.getHours() * 60 + now.getMinutes();
+  for (let i = 0; i < 8; i++) {
+    const d = (day + i) % 7;
+    const sd = schedule[String(d)];
+    if (!sd || sd.closed) continue;
+    const openM = toMinutes(sd.open);
+    if (i === 0 && curMin >= openM) continue;
+    const prefix = i === 0 ? "Abre às" : i === 1 ? "Abre amanhã às" : `Abre ${DAY_NAMES[d].toLowerCase()} às`;
+    return { isOpen: false, label: `${prefix} ${formatHour(sd.open)}` };
+  }
+  return { isOpen: false, label: "Fechado" };
 };
 
 export const useStoreOpen = () => {
@@ -80,6 +106,7 @@ export const useStoreOpen = () => {
   const now = new Date();
   const isOpen = isStoreOpenNow(effective, now);
   const today = effective[String(now.getDay())];
+  const status = getStoreStatusLabel(effective, now);
 
-  return { loading, schedule: effective, isOpen, today, _tick: tick };
+  return { loading, schedule: effective, isOpen, today, status, _tick: tick };
 };
