@@ -9,6 +9,12 @@ export interface LayoutSettings {
   empresa_banner_mobile_url: string;
   empresa_banner_extra1_url: string;
   empresa_banner_extra2_url: string;
+  banner_principal_action_type: string; // 'none' | 'link' | 'cupom'
+  banner_principal_action_value: string;
+  banner_extra1_action_type: string;
+  banner_extra1_action_value: string;
+  banner_extra2_action_type: string;
+  banner_extra2_action_value: string;
   usar_mesma_imagem_mobile: string;
   cor_primaria: string;
   cor_secundaria: string;
@@ -36,6 +42,12 @@ const defaults: LayoutSettings = {
   empresa_banner_mobile_url: 'https://bmhxnlxcgseemmfacuqi.supabase.co/storage/v1/object/public/imagens_clickprato/banner4.png',
   empresa_banner_extra1_url: '',
   empresa_banner_extra2_url: '',
+  banner_principal_action_type: 'none',
+  banner_principal_action_value: '',
+  banner_extra1_action_type: 'none',
+  banner_extra1_action_value: '',
+  banner_extra2_action_type: 'none',
+  banner_extra2_action_value: '',
   usar_mesma_imagem_mobile: 'false',
   cor_primaria: '#ff6600',
   cor_secundaria: '#ff9933',

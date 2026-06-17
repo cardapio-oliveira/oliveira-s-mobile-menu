@@ -4,9 +4,10 @@ import StoreStatusBadge from "@/components/StoreStatusBadge";
 
 interface RestaurantHeaderProps {
   actions?: React.ReactNode;
+  onBannerClick?: () => void;
 }
 
-const RestaurantHeader: React.FC<RestaurantHeaderProps> = ({ actions }) => {
+const RestaurantHeader: React.FC<RestaurantHeaderProps> = ({ actions, onBannerClick }) => {
   const { settings, loading } = useLayoutSettings();
 
   if (loading) {
@@ -29,7 +30,9 @@ const RestaurantHeader: React.FC<RestaurantHeaderProps> = ({ actions }) => {
     <div className="relative">
       {/* Banner principal — altura aumentada; a caixa sobrepõe ~70% para não empurrar conteúdo */}
       <div
-        className="h-44 sm:h-72 w-full overflow-hidden"
+        className={`h-44 sm:h-72 w-full overflow-hidden ${onBannerClick ? "cursor-pointer" : ""}`}
+        onClick={onBannerClick}
+        role={onBannerClick ? "button" : undefined}
         style={{
           background: `linear-gradient(to left, ${settings.cor_secundaria}, ${settings.cor_primaria})`,
         }}

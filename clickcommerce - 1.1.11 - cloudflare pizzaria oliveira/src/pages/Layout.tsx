@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,6 +24,72 @@ import { getAllCategories } from '@/services/categoryService';
 import { Category } from '@/types/menu';
 import { supabase } from '@/integrations/supabase/client';
 
+interface CuponOption {
+  id: string;
+  nome: string;
+}
+
+interface BannerActionFieldsProps {
+  label: string;
+  type: string;
+  value: string;
+  cupons: CuponOption[];
+  onTypeChange: (v: string) => void;
+  onValueChange: (v: string) => void;
+}
+
+const BannerActionFields: React.FC<BannerActionFieldsProps> = ({
+  label,
+  type,
+  value,
+  cupons,
+  onTypeChange,
+  onValueChange,
+}) => {
+  return (
+    <div className="mt-2 p-3 rounded border bg-muted/30 space-y-2">
+      <Label className="text-xs font-semibold">{label}</Label>
+      <Select value={type || 'none'} onValueChange={onTypeChange}>
+        <SelectTrigger>
+          <SelectValue placeholder="Selecione a ação" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="none">Nenhuma ação</SelectItem>
+          <SelectItem value="link">Abrir link</SelectItem>
+          <SelectItem value="cupom">Aplicar cupom</SelectItem>
+        </SelectContent>
+      </Select>
+      {type === 'link' && (
+        <Input
+          placeholder="https://exemplo.com"
+          value={value}
+          onChange={(e) => onValueChange(e.target.value)}
+        />
+      )}
+      {type === 'cupom' && (
+        <Select value={value} onValueChange={onValueChange}>
+          <SelectTrigger>
+            <SelectValue placeholder="Selecione um cupom" />
+          </SelectTrigger>
+          <SelectContent>
+            {cupons.length === 0 ? (
+              <SelectItem value="__empty__" disabled>
+                Nenhum cupom disponível
+              </SelectItem>
+            ) : (
+              cupons.map((c) => (
+                <SelectItem key={c.id} value={c.nome}>
+                  {c.nome}
+                </SelectItem>
+              ))
+            )}
+          </SelectContent>
+        </Select>
+      )}
+    </div>
+  );
+};
+
 const Layout = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -36,6 +103,12 @@ const Layout = () => {
   const [bannerMobileUrl, setBannerMobileUrl] = useState('');
   const [bannerExtra1Url, setBannerExtra1Url] = useState('');
   const [bannerExtra2Url, setBannerExtra2Url] = useState('');
+  const [bannerPrincipalActionType, setBannerPrincipalActionType] = useState('none');
+  const [bannerPrincipalActionValue, setBannerPrincipalActionValue] = useState('');
+  const [bannerExtra1ActionType, setBannerExtra1ActionType] = useState('none');
+  const [bannerExtra1ActionValue, setBannerExtra1ActionValue] = useState('');
+  const [bannerExtra2ActionType, setBannerExtra2ActionType] = useState('none');
+  const [bannerExtra2ActionValue, setBannerExtra2ActionValue] = useState('');
   const [usarMesmaImagemMobile, setUsarMesmaImagemMobile] = useState(true);
   const [corPrimaria, setCorPrimaria] = useState('#ff6600');
   const [corSecundaria, setCorSecundaria] = useState('#ff9933');
@@ -53,6 +126,7 @@ const Layout = () => {
   const [corChatFonteCabecalho, setCorChatFonteCabecalho] = useState('#ffffff');
   const [corChatFonteBaloes, setCorChatFonteBaloes] = useState('#050200');
   const [layoutColunasMobile, setLayoutColunasMobile] = useState('1');
+  const [cupons, setCupons] = useState<CuponOption[]>([]);
   const [saving, setSaving] = useState(false);
   const [showResetDialog, setShowResetDialog] = useState(false);
 
@@ -85,6 +159,12 @@ const Layout = () => {
       setBannerMobileUrl(settings.empresa_banner_mobile_url);
       setBannerExtra1Url(settings.empresa_banner_extra1_url);
       setBannerExtra2Url(settings.empresa_banner_extra2_url);
+      setBannerPrincipalActionType((settings as any).banner_principal_action_type || 'none');
+      setBannerPrincipalActionValue((settings as any).banner_principal_action_value || '');
+      setBannerExtra1ActionType((settings as any).banner_extra1_action_type || 'none');
+      setBannerExtra1ActionValue((settings as any).banner_extra1_action_value || '');
+      setBannerExtra2ActionType((settings as any).banner_extra2_action_type || 'none');
+      setBannerExtra2ActionValue((settings as any).banner_extra2_action_value || '');
       setUsarMesmaImagemMobile(settings.usar_mesma_imagem_mobile !== 'false');
       setCorPrimaria(settings.cor_primaria);
       setCorSecundaria(settings.cor_secundaria);
@@ -136,7 +216,25 @@ const Layout = () => {
         setLoadingCategories(false);
       }
     };
+    const loadCupons = async () => {
+      try {
+        const now = new Date().toISOString();
+        const { data, error } = await supabase
+          .from('cupons')
+          .select('id, nome')
+          .eq('ativo', true)
+          .lte('data_inicio', now)
+          .gte('data_fim', now)
+          .order('nome', { ascending: true });
+        if (!error && data) {
+          setCupons(data as CuponOption[]);
+        }
+      } catch (err) {
+        console.error('Erro ao carregar cupons:', err);
+      }
+    };
     loadCategories();
+    loadCupons();
   }, []);
 
   const handleCategoryColorChange = (catId: string, field: 'bgColor' | 'fontColor', value: string) => {
@@ -167,6 +265,12 @@ const Layout = () => {
         saveLayoutSetting('empresa_banner_mobile_url', bannerMobileUrl),
         saveLayoutSetting('empresa_banner_extra1_url', bannerExtra1Url),
         saveLayoutSetting('empresa_banner_extra2_url', bannerExtra2Url),
+        saveLayoutSetting('banner_principal_action_type', bannerPrincipalActionType),
+        saveLayoutSetting('banner_principal_action_value', bannerPrincipalActionValue),
+        saveLayoutSetting('banner_extra1_action_type', bannerExtra1ActionType),
+        saveLayoutSetting('banner_extra1_action_value', bannerExtra1ActionValue),
+        saveLayoutSetting('banner_extra2_action_type', bannerExtra2ActionType),
+        saveLayoutSetting('banner_extra2_action_value', bannerExtra2ActionValue),
         saveLayoutSetting('usar_mesma_imagem_mobile', usarMesmaImagemMobile ? 'true' : 'false'),
         saveLayoutSetting('cor_primaria', corPrimaria),
         saveLayoutSetting('cor_secundaria', corSecundaria),
@@ -384,12 +488,38 @@ const Layout = () => {
               )}
             </div>
 
+            {/* Ação ao clicar no Banner Principal */}
+            <BannerActionFields
+              label="Ação ao clicar no Banner Principal"
+              type={bannerPrincipalActionType}
+              value={bannerPrincipalActionValue}
+              cupons={cupons}
+              onTypeChange={setBannerPrincipalActionType}
+              onValueChange={setBannerPrincipalActionValue}
+            />
+
             {/* Banners Extras (2:1) abaixo do header */}
             {[
-              { label: 'Banner Extra 1 (2:1)', url: bannerExtra1Url, setter: setBannerExtra1Url },
-              { label: 'Banner Extra 2 (2:1)', url: bannerExtra2Url, setter: setBannerExtra2Url },
+              {
+                label: 'Banner Extra 1 (2:1)',
+                url: bannerExtra1Url,
+                setter: setBannerExtra1Url,
+                actionType: bannerExtra1ActionType,
+                setActionType: setBannerExtra1ActionType,
+                actionValue: bannerExtra1ActionValue,
+                setActionValue: setBannerExtra1ActionValue,
+              },
+              {
+                label: 'Banner Extra 2 (2:1)',
+                url: bannerExtra2Url,
+                setter: setBannerExtra2Url,
+                actionType: bannerExtra2ActionType,
+                setActionType: setBannerExtra2ActionType,
+                actionValue: bannerExtra2ActionValue,
+                setActionValue: setBannerExtra2ActionValue,
+              },
             ].map((b) => (
-              <div key={b.label}>
+              <div key={b.label} className="space-y-2">
                 <Label>{b.label}</Label>
                 {b.url && (
                   <img
@@ -410,6 +540,14 @@ const Layout = () => {
                   placeholder="Ou cole a URL da imagem"
                   value={b.url}
                   onChange={(e) => b.setter(e.target.value)}
+                />
+                <BannerActionFields
+                  label={`Ação ao clicar no ${b.label.replace(' (2:1)', '')}`}
+                  type={b.actionType}
+                  value={b.actionValue}
+                  cupons={cupons}
+                  onTypeChange={b.setActionType}
+                  onValueChange={b.setActionValue}
                 />
               </div>
             ))}

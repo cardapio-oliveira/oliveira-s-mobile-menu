@@ -68,7 +68,7 @@ export const getCategory = async (id: string): Promise<Category | null> => {
 export const saveCategory = async (category: Category): Promise<string> => {
   const id = category.id && category.id.trim() !== "" ? category.id : crypto.randomUUID();
   const row = toRow({ ...category, id });
-  const { error } = await supabase.from("categories").upsert(row);
+  const { error } = await supabase.from("categories").upsert(row as any);
   if (error) throw error;
   return id;
 };
@@ -76,7 +76,7 @@ export const saveCategory = async (category: Category): Promise<string> => {
 export const updateCategory = async (category: Category): Promise<string> => {
   if (!category.id) throw new Error("Category ID is required for updates");
   const { id, ...rest } = toRow(category);
-  const { error } = await supabase.from("categories").update(rest).eq("id", id);
+  const { error } = await supabase.from("categories").update(rest as any).eq("id", id);
   if (error) throw error;
   return id;
 };

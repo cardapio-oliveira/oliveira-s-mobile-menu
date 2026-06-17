@@ -18,6 +18,7 @@ import { useActiveOrdersCount } from "@/hooks/useActiveOrdersCount";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import StoreClosedBanner from "@/components/StoreClosedBanner";
+import { useBannerAction } from "@/hooks/useBannerAction";
 
 const Index = () => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
@@ -28,6 +29,7 @@ const Index = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { settings } = useLayoutSettings();
+  const runBannerAction = useBannerAction();
   const [isChatOpen, setIsChatOpen] = useState(false);
   const activeOrdersCount = useActiveOrdersCount();
   const itemRefs = useRef<Record<string, { triggerClick: () => void } | null>>({});
@@ -133,6 +135,12 @@ const Index = () => {
       {/* HEADER COM SOBREPOSIÇÃO NO BANNER */}
       <div className="-mt-12 md:mt-0 relative z-20">
         <RestaurantHeader
+          onBannerClick={() =>
+            runBannerAction(
+              (settings as any).banner_principal_action_type,
+              (settings as any).banner_principal_action_value
+            )
+          }
           actions={
             <div className="flex flex-col gap-2">
               {currentUser && (
@@ -189,8 +197,14 @@ const Index = () => {
               url ? (
                 <div
                   key={i}
-                  className="w-full overflow-hidden rounded-lg bg-muted"
+                  className="w-full overflow-hidden rounded-lg bg-muted cursor-pointer"
                   style={{ aspectRatio: "2 / 1" }}
+                  onClick={() =>
+                    runBannerAction(
+                      (settings as any)[`banner_extra${i + 1}_action_type`],
+                      (settings as any)[`banner_extra${i + 1}_action_value`]
+                    )
+                  }
                 >
                   <img src={url} alt={`Banner ${i + 1}`} className="w-full h-full object-cover" />
                 </div>

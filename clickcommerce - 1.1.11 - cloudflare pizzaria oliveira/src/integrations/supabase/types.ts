@@ -16,7 +16,6 @@ export type Database = {
     Tables: {
       categories: {
         Row: {
-          columns_mobile: number | null
           created_at: string
           id: string
           is_popular_category: boolean
@@ -26,7 +25,6 @@ export type Database = {
           visible: boolean
         }
         Insert: {
-          columns_mobile?: number | null
           created_at?: string
           id: string
           is_popular_category?: boolean
@@ -36,7 +34,6 @@ export type Database = {
           visible?: boolean
         }
         Update: {
-          columns_mobile?: number | null
           created_at?: string
           id?: string
           is_popular_category?: boolean
@@ -165,7 +162,7 @@ export type Database = {
           limite_uso: number | null
           nome: string
           origem: string | null
-          primeira_compra_apenas: boolean
+          primeira_compra_apenas: boolean | null
           produto_brinde: Json | null
           produtos_requeridos: Json | null
           tipo: string
@@ -184,7 +181,7 @@ export type Database = {
           limite_uso?: number | null
           nome: string
           origem?: string | null
-          primeira_compra_apenas?: boolean
+          primeira_compra_apenas?: boolean | null
           produto_brinde?: Json | null
           produtos_requeridos?: Json | null
           tipo: string
@@ -203,7 +200,7 @@ export type Database = {
           limite_uso?: number | null
           nome?: string
           origem?: string | null
-          primeira_compra_apenas?: boolean
+          primeira_compra_apenas?: boolean | null
           produto_brinde?: Json | null
           produtos_requeridos?: Json | null
           tipo?: string
