@@ -1,0 +1,20 @@
+id,name,description,additional_price,available,category_ids,created_at,updated_at
+00c1e06d-5e66-45a2-a322-900b743b58fc,🥚 Ovo,,5,true,"[""grandes-salgadas""]",2026-05-29 02:29:05.202252+00,2026-05-29 02:29:05.202252+00
+05ecdd1e-e2d4-4f42-b27a-7f8fb48f71fd,🥦 Brócolis,,14,true,"[""grandes-salgadas""]",2026-05-29 02:29:24.20694+00,2026-05-29 02:29:24.20694+00
+11d6bf6e-7ca4-4ed3-ad14-15304649f97f,🧄 Alho Poró,,5,true,"[""grandes-salgadas""]",2026-05-29 02:30:48.085707+00,2026-05-29 02:30:48.085707+00
+1410a2b0-1313-40e3-a5eb-32f62a35b7ab,🧀 Parmesão,,8,true,"[""grandes-salgadas""]",2026-05-29 02:30:05.458983+00,2026-05-29 02:30:05.458983+00
+3bfd146f-f42a-4d23-aef8-1d5b0932f469,🧄 Alho Frito,,5,true,"[""grandes-salgadas""]",2026-05-29 02:30:37.402521+00,2026-05-29 02:30:37.402521+00
+3d9f4a17-a09f-4f8b-a6a0-f487bffc51f9,🍖 Lombo,,10,true,"[""grandes-salgadas""]",2026-05-29 02:27:42.558603+00,2026-05-29 02:27:42.558603+00
+62412b08-cef0-4c91-bd3d-3f8fe660262b,🌴 Palmito,,12,true,"[""grandes-salgadas""]",2026-05-29 02:24:36.127508+00,2026-05-29 02:25:43.276293+00
+642e36c0-d22a-4adb-ad46-2b041cd5c4fc,🧀 Requeijão,,14,true,"[""grandes-salgadas""]",2026-05-29 02:30:17.525183+00,2026-05-29 02:30:17.525183+00
+7888ee6b-9c65-4f96-bfc5-771adcdd30b0,🌽 Milho,,5,true,"[""grandes-salgadas""]",2026-05-29 02:25:07.891466+00,2026-05-29 02:25:51.376616+00
+7dd29981-e50f-409a-8fd5-68a29d5ef0d8,🥓 Bacon,,14,true,"[""grandes-salgadas""]",2026-05-29 02:28:52.533016+00,2026-05-29 02:28:52.533016+00
+8b6d8cc8-e5dc-4afc-97e2-91884b35811a,🍅 Tomate Seco,,14,true,"[""grandes-salgadas""]",2026-05-29 02:26:39.844333+00,2026-05-29 02:26:39.844333+00
+91f8df10-9f26-43ef-9b14-fc0e1b2d1bf9,🍓 Morango,,8,true,"[""grandes-doces""]",2026-05-29 02:33:45.878167+00,2026-05-29 02:33:45.878167+00
+c3fd2e01-9e89-4c78-be81-e7d2170cc7f4,🍗 Frango,,12,true,"[""grandes-salgadas""]",2026-05-29 02:27:55.464803+00,2026-05-29 02:27:55.464803+00
+c8f0326f-79a3-421d-84b4-d0088e689b7d,🍫 Chocolate,,8,true,"[""grandes-doces""]",2026-05-29 02:28:14.846677+00,2026-05-29 02:28:14.846677+00
+d7bd9e30-9304-448e-81df-2dfeaf927cb8,🍖 Calabresa,,10,true,"[""grandes-salgadas""]",2026-05-29 02:27:22.396805+00,2026-05-29 02:27:22.396805+00
+dd8d0bb6-cb73-4028-99f3-66440db3460f,🥫 Ervilha,,5,true,"[""grandes-salgadas""]",2026-05-29 02:29:40.524835+00,2026-05-29 02:29:40.524835+00
+e89d4ef3-40ff-4078-b8f3-f5d37dfed0dd,🍎 Tomate Cereja,,5,true,"[""grandes-salgadas""]",2026-05-29 02:27:06.985388+00,2026-05-29 02:27:06.985388+00
+ef119b22-adeb-4919-a8f2-2030052341c4,🧀 Mussarela,,12,true,"[""grandes-salgadas""]",2026-05-29 02:29:53.567484+00,2026-05-29 02:29:53.567484+00
+f8fafdb1-96ab-449a-b35e-0124f50a90eb,🍅 Tomate em Rodelas,,5,true,"[""grandes-salgadas""]",2026-05-29 02:26:20.980478+00,2026-05-29 02:26:20.980478+00

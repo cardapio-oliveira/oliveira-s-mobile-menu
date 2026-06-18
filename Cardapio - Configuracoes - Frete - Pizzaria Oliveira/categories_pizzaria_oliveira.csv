@@ -1,0 +1,10 @@
+id,name,order,is_popular_category,visible,created_at,updated_at,columns_mobile
+as-tradicionais,As Tradicionais,1,false,true,2026-06-12 01:29:37.606657+00,2026-06-16 12:58:37.026592+00,2
+bebidas,Bebidas,6,false,true,2026-05-16 11:29:55.820927+00,2026-06-12 01:29:52.35464+00,
+brotos-doces,Brotos Doces,5,false,true,2026-05-15 21:42:42.860234+00,2026-06-12 01:29:53.302268+00,
+brotos-salgados,Brotos Salgados,4,false,true,2026-05-15 21:42:37.295408+00,2026-06-12 01:29:56.346113+00,
+esfihas,Esfihas,7,false,true,2026-05-29 02:14:01.582796+00,2026-06-12 01:29:51.185347+00,
+esfihas-doces,Esfihas Doces,8,false,true,2026-05-29 02:14:07.965403+00,2026-06-12 01:29:49.632455+00,
+grandes-doces,Grandes Doces,3,false,true,2026-05-15 21:42:28.556488+00,2026-06-12 01:29:57.684102+00,
+grandes-salgadas,Grandes Salgadas,2,false,true,2026-05-15 21:42:16.742818+00,2026-06-12 15:20:21.202566+00,2
+popular-items,As Preferidas,0,true,true,2026-05-15 21:28:32.883965+00,2026-06-16 19:18:29.487521+00,2
