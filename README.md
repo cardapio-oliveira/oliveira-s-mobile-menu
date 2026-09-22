@@ -1,4 +1,4 @@
 ----------------------------------------------------
-**V.1.128.2** - sabor-delivery-facil - 22/09/2026**
+**V.1.129.2** - oliveira-s-mobile-menu - 22/09/2026**
 ----------------------------------------------------
-Agora a área do título ocupa exatamente duas linhas em todos os cards: troquei min-h-[2.5rem] por h-[2.5rem] (altura fixa) e adicionei line-clamp-2 no texto, então títulos curtos mantêm o espaço de duas linhas e títulos longos são truncados em duas — valor, variação e botões ficam alinhados na base.
+"Visão Geral" é agora a opção padrão do seletor e mostra os filtros completos com os cards de Visitas e de Vendas juntos.
