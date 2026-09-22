@@ -1266,6 +1266,9 @@ const MarketingMetrics: React.FC = () => {
 
         {(metricType === "vendas" || metricType === "geral") && (
           <>
+            {metricType === "geral" && (
+              <h2 className="text-lg font-semibold mb-4">Vendas</h2>
+            )}
             {/* Sales metric cards */}
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8 gap-4 mb-8">
               {salesCards.map((card) => (
@@ -1631,7 +1634,8 @@ const MarketingMetrics: React.FC = () => {
             </Dialog>
 
 
-            {/* Sales chart */}
+            {/* Sales chart (somente na vista Vendas) */}
+            {metricType === "vendas" && (
             <Card className="border-0 bg-card text-card-foreground">
               <CardContent className="p-5">
                 <div className="flex items-center justify-between mb-4">
@@ -1711,6 +1715,7 @@ const MarketingMetrics: React.FC = () => {
                 </div>
               </CardContent>
             </Card>
+            )}
           </>
         )}
 
@@ -2130,6 +2135,9 @@ const MarketingMetrics: React.FC = () => {
 
         {(metricType === "visitas" || metricType === "ga4" || metricType === "geral") && (
           <>
+        {metricType === "geral" && (
+          <h2 className="text-lg font-semibold mb-4">Aquisição</h2>
+        )}
         {/* Metric cards */}
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8 gap-4 mb-8">
           <MetricCard
@@ -2250,7 +2258,8 @@ const MarketingMetrics: React.FC = () => {
         </Dialog>
 
 
-        {/* Chart */}
+        {/* Chart (somente nas vistas Visitas/GA4) */}
+        {(metricType === "visitas" || metricType === "ga4") && (
         <Card className="border-0 bg-card text-card-foreground">
           <CardContent className="p-5">
             <div className="flex items-center justify-between mb-4">
@@ -2328,6 +2337,7 @@ const MarketingMetrics: React.FC = () => {
             </div>
           </CardContent>
         </Card>
+        )}
           </>
         )}
       </div>
