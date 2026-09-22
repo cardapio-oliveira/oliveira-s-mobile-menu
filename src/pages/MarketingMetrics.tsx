@@ -376,7 +376,7 @@ const MarketingMetrics: React.FC = () => {
     setActivePreset("Personalizado");
   };
 
-  const [metricType, setMetricType] = useState("visitas");
+  const [metricType, setMetricType] = useState("geral");
   const [visits, setVisits] = useState<VisitMetrics | null>(null);
   const [prevVisits, setPrevVisits] = useState<VisitMetrics | null>(null);
   const [utmSources, setUtmSources] = useState<string[]>([]);
@@ -390,7 +390,8 @@ const MarketingMetrics: React.FC = () => {
   const [locationOptionsLoading, setLocationOptionsLoading] = useState(false);
 
   // Bairro só faz sentido onde os dados vêm dos pedidos (vendas e produtos)
-  const allowBairroFilter = metricType === "vendas" || metricType === "produtos";
+  const allowBairroFilter =
+    metricType === "vendas" || metricType === "produtos" || metricType === "geral";
 
   // Filtros em estado não-default ganham moldura amarela
   const filterTriggerClass = (active: boolean) =>
@@ -399,7 +400,7 @@ const MarketingMetrics: React.FC = () => {
       active && "border-yellow-500 ring-1 ring-yellow-500/50"
     );
 
-  const metricFilterActive = metricType !== "visitas";
+  const metricFilterActive = metricType !== "geral";
   const channelFilterActive = selectedChannel !== "canais";
   const sourceFilterActive = selectedSource !== "todas";
   const campaignFilterActive = selectedCampaign !== "campanhas";
@@ -414,7 +415,7 @@ const MarketingMetrics: React.FC = () => {
     locationValueActive;
 
   const clearFilters = () => {
-    setMetricType("visitas");
+    setMetricType("geral");
     setSelectedChannel("canais");
     setSelectedSource("todas");
     setSelectedCampaign("campanhas");
@@ -571,7 +572,7 @@ const MarketingMetrics: React.FC = () => {
   // Carrega métricas de visitas do product_events para o período selecionado
   // e para o período anterior equivalente (para o % de variação).
   useEffect(() => {
-    if (metricType !== "visitas" || !dateRange?.from || !dateRange?.to) return;
+    if ((metricType !== "visitas" && metricType !== "geral") || !dateRange?.from || !dateRange?.to) return;
 
     const start = format(dateRange.from, "yyyy-MM-dd");
     const end = format(dateRange.to, "yyyy-MM-dd");
@@ -605,7 +606,7 @@ const MarketingMetrics: React.FC = () => {
   // Carrega o resumo de vendas do período selecionado e do período anterior
   // equivalente (para o % de variação), respeitando os filtros de UTM.
   useEffect(() => {
-    if (metricType !== "vendas" || !dateRange?.from || !dateRange?.to) return;
+    if ((metricType !== "vendas" && metricType !== "geral") || !dateRange?.from || !dateRange?.to) return;
 
     const start = format(dateRange.from, "yyyy-MM-dd");
     const end = format(dateRange.to, "yyyy-MM-dd");
@@ -669,7 +670,7 @@ const MarketingMetrics: React.FC = () => {
 
   // Top 3 dias com mais vendas para o modal de detalhamento
   useEffect(() => {
-    if (!salesDetailsOpen || metricType !== "vendas" || !dateRange?.from || !dateRange?.to) {
+    if (!salesDetailsOpen || (metricType !== "vendas" && metricType !== "geral") || !dateRange?.from || !dateRange?.to) {
       setTopSalesDays([]);
       return;
     }
@@ -862,7 +863,7 @@ const MarketingMetrics: React.FC = () => {
 
   // Carrega série diária da métrica selecionada para o gráfico
   useEffect(() => {
-    if (metricType !== "visitas" || !dateRange?.from || !dateRange?.to) return;
+    if ((metricType !== "visitas" && metricType !== "geral") || !dateRange?.from || !dateRange?.to) return;
 
     const start = format(dateRange.from, "yyyy-MM-dd");
     const end = format(dateRange.to, "yyyy-MM-dd");
@@ -892,7 +893,7 @@ const MarketingMetrics: React.FC = () => {
 
   // Carrega série diária real da métrica de vendas selecionada
   useEffect(() => {
-    if (metricType !== "vendas" || !dateRange?.from || !dateRange?.to) return;
+    if ((metricType !== "vendas" && metricType !== "geral") || !dateRange?.from || !dateRange?.to) return;
 
     const start = format(dateRange.from, "yyyy-MM-dd");
     const end = format(dateRange.to, "yyyy-MM-dd");
@@ -1156,9 +1157,10 @@ const MarketingMetrics: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <Select value={metricType} onValueChange={setMetricType}>
             <SelectTrigger className={filterTriggerClass(metricFilterActive)}>
-              <SelectValue placeholder="Visitas" />
+              <SelectValue placeholder="Visão Geral" />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="geral">Visão Geral</SelectItem>
               <SelectItem value="visitas">Visitas</SelectItem>
               <SelectItem value="vendas">Vendas</SelectItem>
               <SelectItem value="produtos">Produtos</SelectItem>
@@ -1262,7 +1264,7 @@ const MarketingMetrics: React.FC = () => {
         </div>
 
 
-        {metricType === "vendas" ? (
+        {(metricType === "vendas" || metricType === "geral") && (
           <>
             {/* Sales metric cards */}
             <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8 gap-4 mb-8">
@@ -1710,7 +1712,9 @@ const MarketingMetrics: React.FC = () => {
               </CardContent>
             </Card>
           </>
-        ) : metricType === "produtos" ? (
+        )}
+
+        {metricType === "produtos" && (
           <>
             {/* Cards de produtos */}
             <div className="grid grid-cols-2 sm:grid-cols-2 gap-4 mb-8">
@@ -1863,7 +1867,9 @@ const MarketingMetrics: React.FC = () => {
               </CardContent>
             </Card>
           </>
-        ) : metricType === "funil" ? (
+        )}
+
+        {metricType === "funil" && (
           <>
             {/* Funil de vendas */}
             <Card className="border-0 bg-card text-card-foreground mb-8">
@@ -2120,7 +2126,9 @@ const MarketingMetrics: React.FC = () => {
               </CardContent>
             </Card>
           </>
-        ) : (
+        )}
+
+        {(metricType === "visitas" || metricType === "ga4" || metricType === "geral") && (
           <>
         {/* Metric cards */}
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8 gap-4 mb-8">
